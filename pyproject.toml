@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "server"
 version = "0.1.0"
-description = ""
+description = "Server using websocket."
 authors = ["Márcio Roberto Andrade Souza Filho <marciorasf@gmail.com>"]
 
 [tool.poetry.dependencies]
