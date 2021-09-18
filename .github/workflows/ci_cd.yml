@@ -78,3 +78,27 @@ jobs:
             ${{secrets.DOCKERHUB_USERNAME}}/websocket-test:${{ github.run_id }}
             ${{secrets.DOCKERHUB_USERNAME}}/websocket-test:latest
           github-token: ${{ github.token }}
+
+  deploy:
+    needs: [build]
+    
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: caprover-releases
+    
+    - name: Set captain-definition new image
+      uses: jossef/action-set-json-field@v1
+      with:
+        file: captain-definition
+        field: imageName
+        value: ${{secrets.DOCKERHUB_USERNAME}}/websocket-test:${{ github.run_id }}
+        
+    - name: Commit new captain-definition
+      uses: stefanzweifel/git-auto-commit-action@v4.12.0
+      with:
+        commit_message: update image tag to ${{ github.run_id }}
+        branch: caprover-releases
+        push_options: --force
