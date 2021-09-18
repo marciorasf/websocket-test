@@ -9,24 +9,12 @@ import server.utils as utils
 from server.client_manager import ClientManager
 from server.message import Message
 from server.message_handler import MessageHandler
-from server.number_generator import NumberGenerator, create_even_generator
+from server.number_generator import create_even_generator
+from server.delivery_manager import DeliveryManager
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("uvicorn.error").setLevel(logging.WARNING)
 logger = logging.getLogger("server")
-
-
-class DeliveryManager:
-    def __init__(self, number_generator: NumberGenerator, client_manager: ClientManager):
-        self.number_generator = number_generator
-        self.client_manager = client_manager
-
-    async def start_sending_trades(self):
-        async for number in self.number_generator.numbers():
-            logger.debug(f"New number: {number}")
-
-            tasks = [client.send_number(str(number)) for client in self.client_manager.clients()]
-            await asyncio.gather(*tasks)
 
 
 class Manager:
