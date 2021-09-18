@@ -39,11 +39,10 @@ def test_remove(ws):
     assert len(manager) == 1
 
 
-def test_remove_nonexistent():
+def test_remove_nonexistent_doesnt_raise_exception():
     manager = ClientManager()
 
-    with pytest.raises(KeyError):
-        manager.remove("1")
+    manager.remove("1")
 
 
 def test_clients(ws):

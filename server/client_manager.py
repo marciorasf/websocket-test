@@ -19,6 +19,7 @@ class ClientManager:
 
     def add(self, client: Client) -> None:
         logger.debug(f"Adding client '{client.id}'")
+
         self._clients[client.id] = client
 
     def get(self, id: str) -> Client:
@@ -26,7 +27,11 @@ class ClientManager:
 
     def remove(self, id: str) -> None:
         logger.debug(f"Removing client '{id}'")
-        del self._clients[id]
+
+        if id in self._clients:
+            del self._clients[id]
+        else:
+            logger.warning(f"Tried to remove nonexistent client '{id}'.")
 
     def clients(self) -> Generator[Client, None, None]:
         return (client for client in self._clients.values())
