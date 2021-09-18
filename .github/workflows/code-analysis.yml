@@ -23,20 +23,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-          poetry shell
 
       - name: Formatting code with black
         run: |
-          black server
+          poetry run black server
 
       - name: Analysing code with flake8
         run: |
-          flake8 server
+          poetry run flake8 server
 
       - name: Analysing code with mypy
         run: |
-          mypy server
+          poetry run mypy server
 
       - name: Analysing the code with pylint
         run: |
-          pylint server
+          poetry run pylint server
