@@ -1,18 +1,15 @@
 from fastapi import WebSocket
-from server.main import app
 from fastapi.testclient import TestClient
-import json
+from server.main import app
+from server.message import Message
 
 
 def test_main():
-    client = TestClient(app)
+    with TestClient(app) as client:
+        with client.websocket_connect("/") as ws:
+            ws: WebSocket
 
-    with client.websocket_connect("/") as ws:
-        ws: WebSocket
+            payload = Message(action="subscribe", payload=None).to_json()
+            ws.send_text(payload)
 
-        payload = json.dumps({"subscribe": "all"})
-        ws.send_json(payload)
-
-        ws.close()
-
-    assert True
+            ws.close()

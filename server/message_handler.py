@@ -1,8 +1,12 @@
+import logging
+
 from fastapi import WebSocket
 
+import server.utils as utils
 from server.client_manager import Client, ClientManager
 from server.message import Message
-import server.utils as utils
+
+logger = logging.getLogger("server")
 
 
 class MessageHandler:
@@ -18,7 +22,9 @@ class MessageHandler:
             raise ValueError("Unknown action.")
 
     def _subscribe(self, ws: WebSocket) -> None:
+        logger.debug(f"Subscribing client '{utils.client_name(ws)}'.")
         self.client_manager.add(Client(ws=ws, id=utils.client_name(ws)))
 
     def _unsubscribe(self, ws: WebSocket) -> None:
+        logger.debug(f"Unsubscribing client '{utils.client_name(ws)}'.")
         self.client_manager.remove(utils.client_name(ws))
