@@ -49,4 +49,5 @@ async def websocket_endpoint(ws: WebSocket):
 
             manager.message_handler.handle(ws, Message.from_json(msg))
     except WebSocketDisconnect:
+        manager.client_manager.remove(client_name)
         logger.info(f"Client '{client_name}' disconnected.")
