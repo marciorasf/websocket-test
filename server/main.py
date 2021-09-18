@@ -1,5 +1,6 @@
 import asyncio
 from asyncio.tasks import Task
+from typing import Optional, Dict, Any
 
 from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
@@ -14,11 +15,11 @@ from server.number_generator import create_even_generator
 
 
 class Manager:
-    def __init__(self):
+    def __init__(self) -> None:
         self.client_manager = ClientManager()
         self.message_handler = MessageHandler(self.client_manager)
         self.delivery_manager = DeliveryManager(create_even_generator(), self.client_manager)
-        self.delivery_task: Task[None] = None
+        self.delivery_task: Optional[Task[None]] = None
 
 
 manager = Manager()
@@ -26,17 +27,18 @@ app = FastAPI()
 
 
 @app.on_event("startup")
-async def on_startup():
+async def on_startup() -> None:
     manager.delivery_task = asyncio.create_task(manager.delivery_manager.deliver_trades())
 
 
 @app.on_event("shutdown")
-async def on_shutdown():
-    manager.delivery_task.cancel()
+async def on_shutdown() -> None:
+    if manager.delivery_task:
+        manager.delivery_task.cancel()
 
 
 @app.websocket("/")
-async def websocket_endpoint(ws: WebSocket):
+async def websocket_endpoint(ws: WebSocket) -> None:
     await ws.accept()
 
     client_name = utils.client_name(ws)
@@ -44,7 +46,7 @@ async def websocket_endpoint(ws: WebSocket):
 
     try:
         while True:
-            msg = await ws.receive_json()
+            msg: Dict[str, Any] = await ws.receive_json()
             logger.debug(f"Client '{client_name}' sent message: {msg}.")
 
             manager.message_handler.handle(ws, Message.from_json(msg))
