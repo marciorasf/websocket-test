@@ -12,4 +12,7 @@ def test_main():
             payload = Message(action="subscribe", payload=None).to_json()
             ws.send_text(payload)
 
+            payload = Message(action="unsubscribe", payload=None).to_json()
+            ws.send_text(payload)
+
             ws.close()
