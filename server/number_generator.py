@@ -11,7 +11,7 @@ class NumberGenerator:
     async def numbers(self) -> AsyncGenerator[int, None]:
         for x in itertools.count(start=0):
             yield self._transform_fn(x)
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(0.5)
 
 
 def create_even_generator() -> NumberGenerator:

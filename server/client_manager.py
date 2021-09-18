@@ -14,6 +14,9 @@ class Client:
     ws: WebSocket
     queue: Queue = Queue()
 
+    async def send_number(self, number: int) -> None:
+        await self.ws.send_text(number)
+
 
 class ClientManager:
     def __init__(self) -> None:
