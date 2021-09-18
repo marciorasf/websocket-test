@@ -27,6 +27,9 @@ class ClientManager:
     def get(self, id: str) -> Client:
         return self._clients[id]
 
+    def contains(self, id: str) -> bool:
+        return id in self._clients
+
     def remove(self, id: str) -> None:
         logger.debug(f"Removing client '{id}'")
 
