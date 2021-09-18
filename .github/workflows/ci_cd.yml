@@ -52,3 +52,29 @@ jobs:
 
       - name: Analyse the code with pylint
         run: poetry run pylint server
+
+  build:
+    needs: [tests]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login on DockerHub
+        uses: docker/login-action@v1.9.0
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
+          logout: true
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2.4.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{secrets.DOCKERHUB_USERNAME}}/websocket-test:${{ github.run_id }}
+            ${{secrets.DOCKERHUB_USERNAME}}/websocket-test:latest
+          github-token: ${{ github.token }}
