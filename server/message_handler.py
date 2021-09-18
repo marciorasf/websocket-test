@@ -20,8 +20,10 @@ class MessageHandler:
 
     def _subscribe(self, ws: WebSocket) -> None:
         logger.debug(f"Subscribing client '{utils.client_name(ws)}'.")
+
         self.client_manager.add(Client(ws=ws, id=utils.client_name(ws)))
 
     def _unsubscribe(self, ws: WebSocket) -> None:
         logger.debug(f"Unsubscribing client '{utils.client_name(ws)}'.")
+
         self.client_manager.remove(utils.client_name(ws))

@@ -20,8 +20,6 @@ class ClientManager:
         self._clients: Dict[str, Client] = dict()
 
     def add(self, client: Client) -> None:
-        logger.debug(f"Adding client '{client.id}'")
-
         self._clients[client.id] = client
 
     def get(self, id: str) -> Client:
@@ -31,8 +29,6 @@ class ClientManager:
         return id in self._clients
 
     def remove(self, id: str) -> None:
-        logger.debug(f"Removing client '{id}'")
-
         if id in self._clients:
             del self._clients[id]
         else:
