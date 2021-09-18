@@ -10,6 +10,14 @@ def ws() -> WebSocket:
     return Mock(spec=WebSocket)
 
 
+@pytest.mark.asyncio
+async def test_client_send_number(ws):
+    client = Client("1", ws)
+    await client.send_number("1")
+
+    ws.send_text.assert_called()
+
+
 def test_add():
     manager = ClientManager()
 
