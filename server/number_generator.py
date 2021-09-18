@@ -5,7 +5,9 @@ import asyncio
 
 
 class NumberGenerator:
-    def __init__(self, transform_fn: Callable[[int], int] = lambda x: x, interval_in_seconds: float = 0.5) -> None:
+    def __init__(
+        self, transform_fn: Callable[[int], int] = lambda x: x, interval_in_seconds: float = 0.5
+    ) -> None:
         self._transform_fn = transform_fn
         self._interval_in_seconds = interval_in_seconds
 
