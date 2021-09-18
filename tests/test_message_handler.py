@@ -2,7 +2,8 @@ from unittest.mock import Mock
 
 import pytest
 from server.client_manager import ClientManager
-from server.message_handler import Message, MessageHandler
+from server.message import Message
+from server.message_handler import MessageHandler
 from starlette.websockets import WebSocket
 
 

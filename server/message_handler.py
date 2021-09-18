@@ -1,15 +1,7 @@
-from dataclasses import dataclass
-from typing import Dict, Literal, Union
-
 from starlette.websockets import WebSocket
 
 from server.client_manager import Client, ClientManager
-
-
-@dataclass
-class Message:
-    action: Union[Literal["subscribe"], Literal["unsubscribe"]]
-    payload: Dict
+from server.message import Message
 
 
 class MessageHandler:

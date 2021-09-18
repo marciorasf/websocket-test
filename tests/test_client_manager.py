@@ -1,7 +1,8 @@
-from starlette.websockets import WebSocket
-from server.client_manager import Client, ClientManager
-import pytest
 from unittest.mock import Mock
+
+import pytest
+from server.client_manager import Client, ClientManager
+from starlette.websockets import WebSocket
 
 
 @pytest.fixture
