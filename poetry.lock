@@ -10,6 +10,18 @@ python-versions = ">=3.6"
 tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 
 [[package]]
+name = "asyncstdlib"
+version = "3.10.1"
+description = "The missing async toolbox"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[package.extras]
+doc = ["sphinx", "sphinxcontrib-trio"]
+test = ["pytest", "flake8", "flake8-bugbear", "black", "coverage", "pytest-cov", "mypy"]
+
+[[package]]
 name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
@@ -498,12 +510,16 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "631382322744a16dd17968a6f5bc8737c96599dd284e9aa306a508a80626e1cf"
+content-hash = "01049b01fa30df2d7a3229c2c737efcabc15f714d23c1316f8a5a0b4fe7988ca"
 
 [metadata.files]
 asgiref = [
     {file = "asgiref-3.4.1-py3-none-any.whl", hash = "sha256:ffc141aa908e6f175673e7b1b3b7af4fdb0ecb738fc5c8b88f69f055c2415214"},
     {file = "asgiref-3.4.1.tar.gz", hash = "sha256:4ef1ab46b484e3c706329cedeff284a5d40824200638503f5768edb6de7d58e9"},
+]
+asyncstdlib = [
+    {file = "asyncstdlib-3.10.1-py2.py3-none-any.whl", hash = "sha256:093f528b5459ce02b15dec77bb6063927d3131ddcb1f66dce00fee8102eb79d7"},
+    {file = "asyncstdlib-3.10.1.tar.gz", hash = "sha256:421b0d1abae71fcab6c951f228faba967095d5d578317091b624347d9d32739a"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
