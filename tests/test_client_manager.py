@@ -1,6 +1,4 @@
-from asyncio.queues import Queue
 from unittest.mock import Mock
-from unittest.test.test_assertions import Test_Assertions
 
 import pytest
 from fastapi import WebSocket
@@ -58,10 +56,3 @@ def test_clients(ws):
 
     assert next(clients) is c1
     assert next(clients) is c2
-
-
-def test_if_empty_queue_is_created_on_client_instantiation(ws):
-    c1 = Client(id="1", ws=ws)
-
-    Test_Assertions().assertIsInstance(c1.queue, Queue)
-    assert c1.queue.empty()
