@@ -1,6 +1,7 @@
-from server.message import Message
-from unittest.test.test_assertions import Test_Assertions
 import json
+from unittest.test.test_assertions import Test_Assertions
+
+from server.message import Message
 
 
 def test_to_json():
@@ -18,3 +19,13 @@ def test_from_json():
     Test_Assertions().assertIsInstance(message, Message)
     assert message.action == "subscribe"
     assert message.payload == {"stream": "all"}
+
+
+def test_from_json_without_payload():
+    data = json.loads('{"action": "subscribe"}')
+
+    message = Message.from_json(data)
+
+    Test_Assertions().assertIsInstance(message, Message)
+    assert message.action == "subscribe"
+    assert message.payload is None
