@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --global poetry
+          pip install poetry
           poetry install
 
       - name: Formatting code with black
