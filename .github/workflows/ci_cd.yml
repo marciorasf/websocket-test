@@ -78,8 +78,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{secrets.DOCKERHUB_USERNAME}}/${{IMAGE_NAME}}:${{ github.run_id }}
-            ${{secrets.DOCKERHUB_USERNAME}}/${{IMAGE_NAME}}:latest
+            ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
+            ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
           github-token: ${{ github.token }}
 
   deploy:
@@ -97,7 +97,7 @@ jobs:
         with:
           file: captain-definition
           field: imageName
-          value: ${{secrets.DOCKERHUB_USERNAME}}/${{IMAGE_NAME}}:${{ github.run_id }}
+          value: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
 
       - name: Commit new captain-definition
         uses: stefanzweifel/git-auto-commit-action@v4.12.0
