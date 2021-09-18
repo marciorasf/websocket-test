@@ -11,14 +11,14 @@ from server.delivery_manager import DeliveryManager
 from server.logger import logger
 from server.message import Message
 from server.message_handler import MessageHandler
-from server.number_generator import create_even_generator
+from server.number_generator import NumberGenerator
 
 
 class Manager:
     def __init__(self) -> None:
         self.client_manager = ClientManager()
         self.message_handler = MessageHandler(self.client_manager)
-        self.delivery_manager = DeliveryManager(create_even_generator(), self.client_manager)
+        self.delivery_manager = DeliveryManager(NumberGenerator(), self.client_manager)
         self.delivery_task: Optional[Task[None]] = None
 
 
