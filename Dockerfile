@@ -5,10 +5,10 @@ RUN pip install poetry
 WORKDIR /app
 
 COPY pyproject.toml poetry.lock /app/
-RUN poetry export -f requirements.txt --output requirements.txt
+RUN poetry export --output requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY server/ server/
 
 EXPOSE 8000
 
