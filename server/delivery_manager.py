@@ -16,5 +16,5 @@ class DeliveryManager:
         async for number in self.number_generator.numbers():
             logger.debug(f"New number: {number}")
 
-            tasks = [client.send_number(str(number)) for client in self.client_manager.clients()]
+            tasks = [client.send_number(number) for client in self.client_manager.clients()]
             await asyncio.gather(*tasks)

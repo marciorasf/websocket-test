@@ -13,7 +13,7 @@ class Client:
     ws: WebSocket
 
     async def send_number(self, number: int) -> None:
-        await self.ws.send_text(number)
+        await self.ws.send_text(str(number))
 
 
 class ClientManager:
