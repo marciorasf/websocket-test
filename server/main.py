@@ -15,15 +15,13 @@ from server.number_generator import create_even_generator
 
 class Manager:
     def __init__(self):
-        self.number_generator = create_even_generator()
         self.client_manager = ClientManager()
         self.message_handler = MessageHandler(self.client_manager)
-        self.delivery_manager = DeliveryManager(self.number_generator, self.client_manager)
+        self.delivery_manager = DeliveryManager(create_even_generator(), self.client_manager)
         self.delivery_task: Task[None] = None
 
 
 manager = Manager()
-
 app = FastAPI()
 
 
