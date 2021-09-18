@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Generator
 from fastapi import WebSocket
 from dataclasses import dataclass
 
@@ -21,6 +21,9 @@ class ClientManager:
 
     def remove(self, id: str) -> None:
         del self._clients[id]
+
+    def clients(self) -> Generator[Client, None, None]:
+        return (client for client in self._clients.values())
 
     def __len__(self):
         return len(self._clients)
