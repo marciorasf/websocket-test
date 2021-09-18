@@ -1,4 +1,5 @@
 import logging
+from asyncio import Queue
 from dataclasses import dataclass
 from typing import Dict, Generator
 
@@ -11,6 +12,7 @@ logger = logging.getLogger("server")
 class Client:
     id: str
     ws: WebSocket
+    queue: Queue = Queue()
 
 
 class ClientManager:
