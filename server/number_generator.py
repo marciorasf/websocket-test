@@ -1,8 +1,11 @@
-class NumberGenerator:
-    def __init__(self):
-        self._current_value = 0
+from collections.abc import Callable
+import itertools
 
-    def number(self):
-        while True:
-            self._current_value += 1
-            yield self._current_value
+
+class NumberGenerator:
+    def __init__(self, transform_fn: Callable[[int], int] = lambda x: x):
+        self._transform_fn = transform_fn
+
+    def numbers(self):
+        for x in itertools.count(start=0):
+            yield self._transform_fn(x)
