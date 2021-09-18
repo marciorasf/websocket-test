@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any
 from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
 
-import server.utils as utils
+from server import utils
 from server.client_manager import ClientManager
 from server.delivery_manager import DeliveryManager
 from server.logger import logger
