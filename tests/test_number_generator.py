@@ -1,7 +1,7 @@
 from server.number_generator import NumberGenerator
 
 
-def test_default_numbers():
+def test_default_numbers() -> None:
     generator = NumberGenerator()
 
     iterations = 0
@@ -14,7 +14,7 @@ def test_default_numbers():
             break
 
 
-def test_numbers_even_function():
+def test_numbers_even_function() -> None:
     generator = NumberGenerator(lambda x: x * 2)
 
     iterations = 0
