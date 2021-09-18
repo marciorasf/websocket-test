@@ -29,6 +29,15 @@ def test_get():
     assert retrieved_client is client
 
 
+def test_contains():
+    manager = ClientManager()
+    client = Client(id="1", ws=ws)
+    manager.add(client)
+
+    assert manager.contains("1")
+    assert not manager.contains("2")
+
+
 def test_remove(ws):
     manager = ClientManager()
     manager.add(Client(id="1", ws=ws))
