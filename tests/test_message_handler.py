@@ -1,10 +1,10 @@
 from unittest.mock import Mock
 
 import pytest
+from fastapi import WebSocket
 from server.client_manager import ClientManager
 from server.message import Message
 from server.message_handler import MessageHandler
-from starlette.websockets import WebSocket
 
 
 @pytest.fixture

@@ -1,8 +1,8 @@
 from unittest.mock import Mock
 
 import pytest
+from fastapi import WebSocket
 from server.client_manager import Client, ClientManager
-from starlette.websockets import WebSocket
 
 
 @pytest.fixture

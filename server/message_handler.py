@@ -1,7 +1,8 @@
-from starlette.websockets import WebSocket
+from fastapi import WebSocket
 
 from server.client_manager import Client, ClientManager
 from server.message import Message
+import server.utils as utils
 
 
 class MessageHandler:
@@ -17,10 +18,7 @@ class MessageHandler:
             raise ValueError("Unknown action.")
 
     def _subscribe(self, ws: WebSocket) -> None:
-        self.client_manager.add(Client(ws=ws, id=self._client_name(ws)))
+        self.client_manager.add(Client(ws=ws, id=utils.client_name(ws)))
 
     def _unsubscribe(self, ws: WebSocket) -> None:
-        self.client_manager.remove(self._client_name(ws))
-
-    def _client_name(self, ws: WebSocket) -> str:
-        return f"{ws.client.host}:{ws.client.port}"
+        self.client_manager.remove(utils.client_name(ws))
