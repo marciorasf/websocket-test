@@ -27,7 +27,7 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def on_startup():
-    manager.delivery_task = asyncio.create_task(manager.delivery_manager.start_sending_trades())
+    manager.delivery_task = asyncio.create_task(manager.delivery_manager.deliver_trades())
 
 
 @app.on_event("shutdown")

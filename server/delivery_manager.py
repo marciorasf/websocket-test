@@ -10,7 +10,7 @@ class DeliveryManager:
         self.number_generator = number_generator
         self.client_manager = client_manager
 
-    async def start_sending_trades(self):
+    async def deliver_trades(self):
         async for number in self.number_generator.numbers():
             logger.debug(f"New number: {number}")
 
