@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import FastAPI, WebSocket
-from websockets.exceptions import ConnectionClosedOK
+from starlette.websockets import WebSocketDisconnect
 
 from server.number_generator import create_even_generator
 
@@ -27,8 +27,9 @@ async def on_shutdown():
 @app.websocket("/")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
+
     try:
-        async for number in number_generator.numbers():
-            await websocket.send_text(str(number))
-    except ConnectionClosedOK:
-        logger.debug("Closed connection.")
+        while True:
+            await websocket.receive_json()
+    except WebSocketDisconnect:
+        logger.debug("Closed connection")
