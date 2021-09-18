@@ -1,10 +1,9 @@
-import logging
 from dataclasses import dataclass
 from typing import Dict, Generator
 
 from fastapi import WebSocket
 
-logger = logging.getLogger("server")
+from server.logger import logger
 
 
 @dataclass

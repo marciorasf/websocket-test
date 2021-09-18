@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from asyncio.tasks import Task
 
 from fastapi import FastAPI, WebSocket
@@ -7,14 +6,11 @@ from starlette.websockets import WebSocketDisconnect
 
 import server.utils as utils
 from server.client_manager import ClientManager
+from server.delivery_manager import DeliveryManager
+from server.logger import logger
 from server.message import Message
 from server.message_handler import MessageHandler
 from server.number_generator import create_even_generator
-from server.delivery_manager import DeliveryManager
-
-logging.basicConfig(level=logging.DEBUG)
-logging.getLogger("uvicorn.error").setLevel(logging.WARNING)
-logger = logging.getLogger("server")
 
 
 class Manager:

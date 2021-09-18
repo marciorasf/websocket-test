@@ -1,10 +1,8 @@
 import asyncio
-import logging
 
 from server.client_manager import ClientManager
+from server.logger import logger
 from server.number_generator import NumberGenerator
-
-logger = logging.getLogger("server")
 
 
 class DeliveryManager:

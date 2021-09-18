@@ -1,12 +1,9 @@
-import logging
-
 from fastapi import WebSocket
 
 import server.utils as utils
 from server.client_manager import Client, ClientManager
+from server.logger import logger
 from server.message import Message
-
-logger = logging.getLogger("server")
 
 
 class MessageHandler:
