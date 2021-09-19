@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 
 COPY server/ server/
 
-EXPOSE 8000
+EXPOSE 80
 
-CMD ["uvicorn", "--host", "0.0.0.0", "server.main:app"]
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "80", "server.main:app"]
