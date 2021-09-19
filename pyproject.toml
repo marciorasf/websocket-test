@@ -45,5 +45,5 @@ console_output_style = "progress"
 addopts = [
   "--cov=server",
   "--cov-report=term",
-  "--cov-fail-under=60"
+  "--cov-fail-under=50"
 ]
