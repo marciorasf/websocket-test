@@ -1,8 +1,9 @@
 import asyncio
 from asyncio.tasks import Task
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, WebSocket
+from starlette.responses import HTMLResponse
 from starlette.websockets import WebSocketDisconnect
 
 from server import utils
@@ -55,3 +56,14 @@ async def websocket_endpoint(ws: WebSocket) -> None:
 
         if manager.client_manager.contains(client_name):
             manager.client_manager.remove(client_name)
+
+
+@app.get("/")
+async def get_root() -> HTMLResponse:
+    return HTMLResponse(
+        """
+        <h1>marciorasf's websocket tests.</h1>
+        <br/>
+        <h2>Use ws:// instead of https:// for connecting to the webserver.</h2>
+        """
+    )
