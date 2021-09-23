@@ -1,10 +1,11 @@
-import itertools
 from collections.abc import Callable
 from typing import AsyncGenerator
 import asyncio
 
 
 class NumberGenerator:
+    MAX_VALUE = int(1e9)
+
     def __init__(
         self, transform_fn: Callable[[int], int] = lambda x: x, interval_in_seconds: float = 0.5
     ) -> None:
@@ -12,9 +13,10 @@ class NumberGenerator:
         self._interval_in_seconds = interval_in_seconds
 
     async def numbers(self) -> AsyncGenerator[int, None]:
-        for x in itertools.count(start=0):
-            yield self._transform_fn(x)
-            await asyncio.sleep(self._interval_in_seconds)
+        while True:
+            for x in range(NumberGenerator.MAX_VALUE):
+                yield self._transform_fn(x)
+                await asyncio.sleep(self._interval_in_seconds)
 
 
 def create_default_generator(interval_in_seconds: float = 0.5) -> NumberGenerator:
