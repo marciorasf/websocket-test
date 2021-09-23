@@ -17,6 +17,10 @@ class NumberGenerator:
             await asyncio.sleep(self._interval_in_seconds)
 
 
+def create_default_generator(interval_in_seconds: float = 0.5) -> NumberGenerator:
+    return NumberGenerator(lambda x: x, interval_in_seconds)
+
+
 def create_even_generator(interval_in_seconds: float = 0.5) -> NumberGenerator:
     return NumberGenerator(lambda x: x * 2, interval_in_seconds)
 
