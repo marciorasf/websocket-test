@@ -4,7 +4,7 @@ import server.utils as utils
 from fastapi import WebSocket
 
 
-def test_client_name():
+def test_client_name() -> None:
     ws: WebSocket = Mock(spec=WebSocket)
     ws.client.host = "127.0.0.1"
     ws.client.port = "1234"

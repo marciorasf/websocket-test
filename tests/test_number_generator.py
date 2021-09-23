@@ -4,7 +4,7 @@ from asyncstdlib.builtins import anext, aiter
 
 
 @pytest.mark.asyncio
-async def test_default_numbers():
+async def test_default_numbers() -> None:
     generator = NumberGenerator(interval_in_seconds=0)
     numbers = aiter(generator.numbers())
 
@@ -14,7 +14,7 @@ async def test_default_numbers():
 
 
 @pytest.mark.asyncio
-async def test_even_generator():
+async def test_even_generator() -> None:
     generator = create_even_generator(interval_in_seconds=0)
     numbers = aiter(generator.numbers())
 
@@ -24,7 +24,7 @@ async def test_even_generator():
 
 
 @pytest.mark.asyncio
-async def test_odd_generator():
+async def test_odd_generator() -> None:
     generator = create_odd_generator(interval_in_seconds=0)
     numbers = aiter(generator.numbers())
 

@@ -53,9 +53,6 @@ jobs:
       - name: Analyse code with mypy
         run: poetry run mypy server
 
-      - name: Analyse the code with pylint
-        run: poetry run pylint server
-
   build:
     needs: [test]
 

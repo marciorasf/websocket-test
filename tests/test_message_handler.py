@@ -8,16 +8,16 @@ from server.message_handler import MessageHandler
 
 
 @pytest.fixture
-def ws():
+def ws() -> Mock:
     return Mock(spec=WebSocket)
 
 
 @pytest.fixture
-def client_manager():
+def client_manager() -> Mock:
     return Mock(spec=ClientManager)
 
 
-def test_handle_subscribe(ws, client_manager):
+def test_handle_subscribe(ws: Mock, client_manager: Mock) -> None:
     handler = MessageHandler(client_manager)
     message = Message(action="subscribe", payload=dict())
 
@@ -26,7 +26,7 @@ def test_handle_subscribe(ws, client_manager):
     client_manager.add.assert_called()
 
 
-def test_handle_unsubscribe(ws, client_manager):
+def test_handle_unsubscribe(ws: Mock, client_manager: Mock) -> None:
     handler = MessageHandler(client_manager)
     message = Message(action="unsubscribe", payload=dict())
 
@@ -35,9 +35,9 @@ def test_handle_unsubscribe(ws, client_manager):
     client_manager.remove.assert_called()
 
 
-def test_handle_unknown_action(ws, client_manager):
+def test_handle_unknown_action(ws: Mock, client_manager: Mock) -> None:
     handler = MessageHandler(client_manager)
-    message = Message(action="other", payload=dict())
+    message = Message(action="other", payload=dict())  # type: ignore
 
     with pytest.raises(ValueError):
         handler.handle(ws, message)

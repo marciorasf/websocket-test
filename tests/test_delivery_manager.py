@@ -1,4 +1,5 @@
 import asyncio
+from typing import List
 from unittest.mock import Mock
 
 import pytest
@@ -9,10 +10,10 @@ from server.number_generator import NumberGenerator
 
 
 class MockClient(Client):
-    def __init__(self, id: str, ws: WebSocket):
+    def __init__(self, id: str, ws: WebSocket) -> None:
         self.id = id
         self.ws = ws
-        self.numbers = []
+        self.numbers: List[int] = []
 
     async def send_number(self, number: int) -> None:
         self.numbers.append(number)
@@ -24,7 +25,7 @@ def ws() -> WebSocket:
 
 
 @pytest.mark.asyncio
-async def test_delivery_manager(ws):
+async def test_delivery_manager(ws: Mock) -> None:
     client = MockClient("1", ws)
     client_manager = ClientManager()
     client_manager.add(client)

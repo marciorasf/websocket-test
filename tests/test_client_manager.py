@@ -11,14 +11,14 @@ def ws() -> WebSocket:
 
 
 @pytest.mark.asyncio
-async def test_client_send_number(ws):
+async def test_client_send_number(ws: Mock) -> None:
     client = Client("1", ws)
-    await client.send_number("1")
+    await client.send_number(1)
 
     ws.send_text.assert_called()
 
 
-def test_add():
+def test_add() -> None:
     manager = ClientManager()
 
     manager.add(Client(id="1", ws=ws))
@@ -27,7 +27,7 @@ def test_add():
     assert len(manager) == 2
 
 
-def test_get():
+def test_get() -> None:
     manager = ClientManager()
     client = Client(id="1", ws=ws)
     manager.add(client)
@@ -37,7 +37,7 @@ def test_get():
     assert retrieved_client is client
 
 
-def test_contains():
+def test_contains() -> None:
     manager = ClientManager()
     client = Client(id="1", ws=ws)
     manager.add(client)
@@ -46,7 +46,7 @@ def test_contains():
     assert not manager.contains("2")
 
 
-def test_remove(ws):
+def test_remove(ws: Mock) -> None:
     manager = ClientManager()
     manager.add(Client(id="1", ws=ws))
     manager.add(Client(id="2", ws=ws))
@@ -56,13 +56,13 @@ def test_remove(ws):
     assert len(manager) == 1
 
 
-def test_remove_nonexistent_doesnt_raise_exception():
+def test_remove_nonexistent_doesnt_raise_exception() -> None:
     manager = ClientManager()
 
     manager.remove("1")
 
 
-def test_clients(ws):
+def test_clients(ws: Mock) -> None:
     manager = ClientManager()
     c1 = Client(id="1", ws=ws)
     manager.add(c1)
