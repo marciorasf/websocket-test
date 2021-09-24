@@ -1,5 +1,4 @@
 import asyncio
-import dataclasses
 import json
 from dataclasses import dataclass
 from datetime import datetime
@@ -13,10 +12,10 @@ from server.number_generator import NumberGenerator
 @dataclass
 class Message:
     content: Union[int, str]
-    timestamp: datetime = datetime.now()
+    timestamp: datetime
 
     def __str__(self) -> str:
-        return json.dumps(dataclasses.asdict(self))
+        return json.dumps(dict(content=self.content, timestamp=datetime.isoformat(self.timestamp)))
 
 
 class DeliveryManager:
@@ -26,9 +25,8 @@ class DeliveryManager:
 
     async def deliver_messages(self) -> None:
         async for number in self.number_generator.numbers():
-            logger.debug(f"New number: {number}")
+            message = str(Message(content=number, timestamp=datetime.now()))
+            logger.debug(f"New message: {message}")
 
-            message = Message(number)
-
-            tasks = [client.send_message(str(message)) for client in self.client_manager.clients()]
+            tasks = [client.send_message(message) for client in self.client_manager.clients()]
             await asyncio.gather(*tasks)
