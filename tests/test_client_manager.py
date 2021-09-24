@@ -11,9 +11,9 @@ def ws() -> WebSocket:
 
 
 @pytest.mark.asyncio
-async def test_client_send_number(ws: Mock) -> None:
+async def test_client_send_message(ws: Mock) -> None:
     client = Client("1", ws)
-    await client.send_number(1)
+    await client.send_message("ola")
 
     ws.send_text.assert_called()
 

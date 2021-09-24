@@ -29,7 +29,7 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def on_startup() -> None:
-    manager.delivery_task = asyncio.create_task(manager.delivery_manager.deliver_numbers())
+    manager.delivery_task = asyncio.create_task(manager.delivery_manager.deliver_messages())
 
 
 @app.on_event("shutdown")

@@ -11,8 +11,8 @@ class Client:
     id: str
     ws: WebSocket
 
-    async def send_number(self, number: int) -> None:
-        await self.ws.send_text(str(number))
+    async def send_message(self, message: str) -> None:
+        await self.ws.send_text(message)
 
 
 class ClientManager:
