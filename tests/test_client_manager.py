@@ -37,6 +37,14 @@ def test_get() -> None:
     assert retrieved_client is client
 
 
+def test_get_nonexistent_client() -> None:
+    manager = ClientManager()
+
+    client = manager.get("1")
+
+    assert client is None
+
+
 def test_contains() -> None:
     manager = ClientManager()
     client = Client(id="1", ws=ws)

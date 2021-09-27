@@ -33,9 +33,8 @@ def ws() -> WebSocket:
     return Mock(spec=WebSocket)
 
 
-# @pytest.mark.skip
-@freeze_time("2021-09-27 21:00:00", tick=True)
 @pytest.mark.asyncio
+@freeze_time("2021-09-27 21:00:00", tick=True)
 async def test_delivery_manager(ws: Mock) -> None:
     client = MockClient("1", ws)
     client_manager = ClientManager()
