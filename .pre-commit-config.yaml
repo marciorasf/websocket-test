@@ -1,26 +1,39 @@
 repos:
   - repo: local
     hooks:
-      - id: pytest-check
-        name: pytest-check
-        entry: pytest --ignore=tests/exploratory
+      - id: pytest-commit
+        name: Test with pytest
+        entry: pytest
         language: system
         pass_filenames: false
-        always_run: true
+        stages: [commit]
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v0.910"
-    hooks:
+      - id: pytest-push
+        name: Test with pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
+        stages: [push]
+        args:
+          - "--cov-fail-under=50"
+
       - id: mypy
-        args: [--ignore-missing-imports]
+        name: Check types with mypy
+        entry: mypy server
+        language: system
+        pass_filenames: false
+        stages: [commit, push]
 
-  - repo: https://github.com/ambv/black
-    rev: 21.7b0
-    hooks:
       - id: black
-        language_version: python3.9
+        name: Format with black
+        entry: black
+        language: system
+        pass_filenames: false
+        stages: [commit, push]
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v1.2.3
-    hooks:
       - id: flake8
+        name: Check formatting with flake8
+        entry: flake8
+        language: system
+        pass_filenames: false
+        stages: [commit, push]
