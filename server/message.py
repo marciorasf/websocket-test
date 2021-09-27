@@ -17,4 +17,8 @@ class Message:
     @classmethod
     def from_json(cls: Type[T], raw_data: Dict[str, Any]) -> T:
         data = defaultdict(lambda: None, raw_data)
-        return Message(action=data["action"], payload=data["payload"])  # type: ignore
+
+        if action := data["action"]:
+            return Message(action=action, payload=data["payload"])  # type: ignore
+        else:
+            raise KeyError("Message must have an action.")
