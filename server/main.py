@@ -10,15 +10,15 @@ from server import utils
 from server.client_manager import ClientManager
 from server.delivery_manager import DeliveryManager
 from server.logger import logger
-from server.message import Message
-from server.message_handler import MessageHandler
 from server.number_generator import NumberGenerator
+from server.request import Request
+from server.request_handler import RequestHandler
 
 
 class Manager:
     def __init__(self) -> None:
         self.client_manager = ClientManager()
-        self.message_handler = MessageHandler(self.client_manager)
+        self.request_handler = RequestHandler(self.client_manager)
         self.delivery_manager = DeliveryManager(NumberGenerator(), self.client_manager)
         self.delivery_task: Optional[Task[None]] = None
 
@@ -47,10 +47,10 @@ async def websocket_endpoint(ws: WebSocket) -> None:
 
     try:
         while True:
-            msg: Dict[str, Any] = await ws.receive_json()
-            logger.debug(f"Client '{client_name}' sent message: {msg}.")
+            request: Dict[str, Any] = await ws.receive_json()
+            logger.debug(f"Client '{client_name}' sent message: {request}.")
 
-            manager.message_handler.handle(ws, Message.from_json(msg))
+            manager.request_handler.handle(ws, Request.from_json(request))
     except WebSocketDisconnect:
         logger.info(f"Client '{client_name}' disconnected.")
 

@@ -3,17 +3,17 @@ from fastapi import WebSocket
 from server import utils
 from server.client_manager import Client, ClientManager
 from server.logger import logger
-from server.message import Message
+from server.request import Request
 
 
-class MessageHandler:
+class RequestHandler:
     def __init__(self, client_manager: ClientManager) -> None:
         self.client_manager = client_manager
 
-    def handle(self, ws: WebSocket, message: Message) -> None:
-        if message.action == "subscribe":
+    def handle(self, ws: WebSocket, request: Request) -> None:
+        if request.action == "subscribe":
             self._subscribe(ws)
-        elif message.action == "unsubscribe":
+        elif request.action == "unsubscribe":
             self._unsubscribe(ws)
         else:
             raise ValueError("Unknown action.")

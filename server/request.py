@@ -1,13 +1,13 @@
 import json
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Dict, Literal, Optional, Type, TypeVar, Union, Any
+from typing import Any, Dict, Literal, Optional, Type, TypeVar, Union
 
-T = TypeVar("T", bound="Message")
+T = TypeVar("T", bound="Request")
 
 
 @dataclass
-class Message:
+class Request:
     action: Union[Literal["subscribe"], Literal["unsubscribe"]]
     payload: Optional[Dict[str, Any]]
 
@@ -19,6 +19,6 @@ class Message:
         data = defaultdict(lambda: None, raw_data)
 
         if action := data["action"]:
-            return Message(action=action, payload=data["payload"])  # type: ignore
+            return Request(action=action, payload=data["payload"])  # type: ignore
         else:
-            raise KeyError("Message must have an action.")
+            raise KeyError("Request must have an action.")
