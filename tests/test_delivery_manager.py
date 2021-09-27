@@ -8,20 +8,21 @@ import pytest
 from fastapi import WebSocket
 from freezegun import freeze_time
 from server.client_manager import Client, ClientManager
-from server.delivery_manager import DeliveryManager, Message
+from server.delivery_manager import DeliveryManager
 from server.number_generator import NumberGenerator
+from server.response import Response
 
 
 class MockClient(Client):
     def __init__(self, id: str, ws: WebSocket) -> None:
         self.id = id
         self.ws = ws
-        self.messages: List[Message] = []
+        self.messages: List[Response] = []
 
     async def send_message(self, message: str) -> None:
         parsed_message = json.loads(message)
         self.messages.append(
-            Message(
+            Response(
                 content=parsed_message["content"],
                 timestamp=datetime.fromisoformat(parsed_message["timestamp"]),
             )
