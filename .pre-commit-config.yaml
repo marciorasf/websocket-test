@@ -15,7 +15,7 @@ repos:
         pass_filenames: false
         stages: [push]
         args:
-          - "--cov-fail-under=50"
+          - "--cov-fail-under=85"
 
       - id: mypy
         name: Check types with mypy
