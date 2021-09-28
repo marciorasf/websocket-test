@@ -1,6 +1,7 @@
 import asyncio
+import json
 from asyncio.tasks import Task
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from fastapi import FastAPI, WebSocket
 from starlette.responses import HTMLResponse
@@ -47,10 +48,10 @@ async def websocket_endpoint(ws: WebSocket) -> None:
 
     try:
         while True:
-            request: Dict[str, Any] = await ws.receive_json()
+            request = await ws.receive_json()
             logger.debug(f"Client '{client_name}' sent message: {request}.")
 
-            manager.request_handler.handle(ws, Request.from_json(request))
+            manager.request_handler.handle(ws, Request.from_json(json.loads(request)))
     except WebSocketDisconnect:
         logger.info(f"Client '{client_name}' disconnected.")
 
