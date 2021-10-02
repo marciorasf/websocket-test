@@ -22,12 +22,14 @@ class AppContext:
         self.settings = Settings()
         self.client_manager = ClientManager()
         self.request_handler = RequestHandler(self.client_manager)
-        self.delivery_manager = DeliveryManager(NumberGenerator(), self.client_manager)
+        self.delivery_manager = DeliveryManager(
+            NumberGenerator(interval_in_seconds=self.settings.generator_interval_in_seconds),
+            self.client_manager,
+        )
         self.delivery_task: Optional[Task[None]] = None
 
 
 context = AppContext()
-print(context.settings.generator_interval_in_seconds)
 app = FastAPI()
 
 
