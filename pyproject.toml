@@ -48,3 +48,6 @@ addopts = [
   "--cov=server",
   "--cov-report=term-missing"
 ]
+markers=[
+  "integration"
+]
