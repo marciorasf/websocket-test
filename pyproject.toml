@@ -23,6 +23,7 @@ requests = "^2.26.0"
 pytest-timeout = "^1.4.2"
 pytest-freezegun = "^0.4.2"
 types-freezegun = "^1.1.0"
+websocket-client = "^1.2.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
