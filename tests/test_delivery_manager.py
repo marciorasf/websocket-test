@@ -6,7 +6,6 @@ from unittest.mock import Mock
 
 import pytest
 from fastapi import WebSocket
-from freezegun import freeze_time
 from server.client_manager import Client, ClientManager
 from server.delivery_manager import DeliveryManager
 from server.number_generator import NumberGenerator
@@ -35,7 +34,7 @@ def ws() -> WebSocket:
 
 
 @pytest.mark.asyncio
-@freeze_time("2021-09-27 21:00:00", tick=True)
+@pytest.mark.freeze_time("2021-09-27 21:00:00", tick=True)
 async def test_delivery_manager(ws: Mock) -> None:
     client = MockClient("1", ws)
     client_manager = ClientManager()
