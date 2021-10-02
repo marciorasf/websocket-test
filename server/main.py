@@ -23,8 +23,10 @@ class AppContext:
         self.client_manager = ClientManager()
         self.request_handler = RequestHandler(self.client_manager)
         self.delivery_manager = DeliveryManager(
-            NumberGenerator(interval_in_seconds=self.settings.generator_interval_in_seconds),
-            self.client_manager,
+            generators=[
+                NumberGenerator(interval_in_seconds=self.settings.generator_interval_in_seconds),
+            ],
+            client_manager=self.client_manager,
         )
         self.delivery_task: Optional[Task[None]] = None
 

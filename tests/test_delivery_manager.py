@@ -41,7 +41,10 @@ async def test_delivery_manager(ws: Mock) -> None:
     client_manager = ClientManager()
     client_manager.add(client)
 
-    delivery_manager = DeliveryManager(NumberGenerator(interval_in_seconds=0.01), client_manager)
+    delivery_manager = DeliveryManager(
+        generators=[NumberGenerator(interval_in_seconds=0.01)],
+        client_manager=client_manager,
+    )
     task = asyncio.create_task(delivery_manager.deliver_messages())
 
     # Since interval_in_seconds=0.01,
