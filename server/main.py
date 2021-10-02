@@ -14,10 +14,12 @@ from server.logger import logger
 from server.number_generator import NumberGenerator
 from server.request import Request
 from server.request_handler import RequestHandler
+from server.settings import Settings
 
 
 class AppContext:
     def __init__(self) -> None:
+        self.settings = Settings()
         self.client_manager = ClientManager()
         self.request_handler = RequestHandler(self.client_manager)
         self.delivery_manager = DeliveryManager(NumberGenerator(), self.client_manager)
@@ -25,6 +27,7 @@ class AppContext:
 
 
 context = AppContext()
+print(context.settings.generator_interval_in_seconds)
 app = FastAPI()
 
 
