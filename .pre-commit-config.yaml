@@ -21,19 +21,22 @@ repos:
         name: Check types with mypy
         entry: mypy server
         language: system
-        pass_filenames: false
+        pass_filenames: true
+        files: server|tests|client
         stages: [commit, push]
 
       - id: black
         name: Format with black
         entry: black
         language: system
-        pass_filenames: false
+        pass_filenames: true
+        files: server|tests|client
         stages: [commit, push]
 
       - id: flake8
         name: Check formatting with flake8
         entry: flake8
         language: system
-        pass_filenames: false
+        pass_filenames: true
+        files: server|tests|client
         stages: [commit, push]
