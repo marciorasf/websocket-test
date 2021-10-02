@@ -4,9 +4,9 @@ from typing import Any, List
 import websocket
 
 
-async def simulate_client(n_messages: int) -> List[Any]:
+async def simulate_client(url: str, n_messages: int) -> List[Any]:
     ws = websocket.WebSocket()
-    ws.connect("ws://localhost:8000")
+    ws.connect(url)
     ws.send(json.dumps(dict(action="subscribe", payload="")))
 
     responses = []
