@@ -50,8 +50,6 @@ async def websocket_endpoint(ws: WebSocket) -> None:
     try:
         while True:
             request = await ws.receive_json()
-            logger.debug(f"Client '{client.id}' sent message: {request}.")
-
             manager.request_handler.handle(client, Request.from_json(json.loads(request)))
     except WebSocketDisconnect:
         logger.info(f"Client '{client.id}' disconnected.")
