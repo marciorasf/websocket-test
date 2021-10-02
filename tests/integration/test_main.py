@@ -20,7 +20,7 @@ class TestServer:
 
         self.proc.start()
         # Time to start server.
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.5)
 
     def stop(self) -> None:
         self.proc.terminate()
