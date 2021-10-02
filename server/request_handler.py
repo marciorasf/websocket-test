@@ -1,6 +1,3 @@
-from fastapi import WebSocket
-
-from server import utils
 from server.client_manager import Client, ClientManager
 from server.logger import logger
 from server.request import Request
@@ -10,20 +7,20 @@ class RequestHandler:
     def __init__(self, client_manager: ClientManager) -> None:
         self.client_manager = client_manager
 
-    def handle(self, ws: WebSocket, request: Request) -> None:
+    def handle(self, client: Client, request: Request) -> None:
         if request.action == "subscribe":
-            self._subscribe(ws)
+            self._subscribe(client)
         elif request.action == "unsubscribe":
-            self._unsubscribe(ws)
+            self._unsubscribe(client)
         else:
             raise ValueError("Unknown action.")
 
-    def _subscribe(self, ws: WebSocket) -> None:
-        logger.debug(f"Subscribing client '{utils.client_name(ws)}'.")
+    def _subscribe(self, client: Client) -> None:
+        logger.debug(f"Subscribing client '{client.id}'.")
 
-        self.client_manager.add(Client(ws=ws, id=utils.client_name(ws)))
+        self.client_manager.add(client)
 
-    def _unsubscribe(self, ws: WebSocket) -> None:
-        logger.debug(f"Unsubscribing client '{utils.client_name(ws)}'.")
+    def _unsubscribe(self, client: Client) -> None:
+        logger.debug(f"Unsubscribing client '{client.id}'.")
 
-        self.client_manager.remove(utils.client_name(ws))
+        self.client_manager.remove(client.id)
