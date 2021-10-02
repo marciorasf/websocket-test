@@ -1,16 +1,6 @@
-from dataclasses import dataclass
 from typing import Dict, Generator, Optional
 
-from fastapi import WebSocket
-
-
-@dataclass
-class Client:
-    id: str
-    ws: WebSocket
-
-    async def send_message(self, message: str) -> None:
-        await self.ws.send_text(message)
+from server.client import Client
 
 
 class ClientManager:

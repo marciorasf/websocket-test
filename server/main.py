@@ -8,6 +8,7 @@ from starlette.responses import HTMLResponse
 from starlette.websockets import WebSocketDisconnect
 
 from server import utils
+from server.client import Client
 from server.client_manager import ClientManager
 from server.delivery_manager import DeliveryManager
 from server.logger import logger
@@ -44,19 +45,20 @@ async def websocket_endpoint(ws: WebSocket) -> None:
     await ws.accept()
 
     client_name = utils.client_name(ws)
-    logger.info(f"Client '{client_name}' connected.")
+    client = Client(id=client_name, ws=ws)
+    logger.info(f"Client '{client.id}' connected.")
 
     try:
         while True:
             request = await ws.receive_json()
-            logger.debug(f"Client '{client_name}' sent message: {request}.")
+            logger.debug(f"Client '{client.id}' sent message: {request}.")
 
-            manager.request_handler.handle(ws, Request.from_json(json.loads(request)))
+            manager.request_handler.handle(client.ws, Request.from_json(json.loads(request)))
     except WebSocketDisconnect:
         logger.info(f"Client '{client_name}' disconnected.")
 
-        if manager.client_manager.contains(client_name):
-            manager.client_manager.remove(client_name)
+        if manager.client_manager.contains(client.id):
+            manager.client_manager.remove(client.id)
 
 
 @app.get("/")
