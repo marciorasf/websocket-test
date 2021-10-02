@@ -10,8 +10,10 @@ def test_get_root() -> None:
 
 def test_setup_and_teardown() -> None:
     with TestClient(app):
-        assert context.delivery_task is not None
-        assert not context.delivery_task.done()
+        assert context.delivery_tasks is not None
+        for task in context.delivery_tasks:
+            assert not task.done()
 
-    assert context.delivery_task.done()
-    assert context.delivery_task.cancelled()
+    for task in context.delivery_tasks:
+        assert task.done()
+        assert task.cancelled()

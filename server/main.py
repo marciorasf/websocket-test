@@ -1,6 +1,5 @@
-import asyncio
 from asyncio.tasks import Task
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import FastAPI, WebSocket
 from starlette.responses import HTMLResponse
@@ -28,7 +27,7 @@ class AppContext:
             ],
             client_manager=self.client_manager,
         )
-        self.delivery_task: Optional[Task[None]] = None
+        self.delivery_tasks: Optional[List[Task[None]]] = None
 
 
 context = AppContext()
@@ -37,13 +36,14 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def on_startup() -> None:
-    context.delivery_task = asyncio.create_task(context.delivery_manager.deliver_messages())
+    context.delivery_tasks = context.delivery_manager.deliver_messages()
 
 
 @app.on_event("shutdown")
 async def on_shutdown() -> None:
-    if context.delivery_task:
-        context.delivery_task.cancel()
+    if context.delivery_tasks:
+        for task in context.delivery_tasks:
+            task.cancel()
 
 
 @app.websocket("/")

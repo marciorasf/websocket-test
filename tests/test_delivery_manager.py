@@ -45,13 +45,14 @@ async def test_delivery_manager(ws: Mock) -> None:
         generators=[NumberGenerator(interval_in_seconds=0.01)],
         client_manager=client_manager,
     )
-    task = asyncio.create_task(delivery_manager.deliver_messages())
+    tasks = delivery_manager.deliver_messages()
 
     # Since interval_in_seconds=0.01,
     # at least [0,1] should be sent in 0.05s.
     await asyncio.sleep(0.05)
 
-    task.cancel()
+    for task in tasks:
+        task.cancel()
 
     assert len(client.messages) >= 2
 
