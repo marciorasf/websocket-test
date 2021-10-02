@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from server.main import app, manager
+from server.main import app, context
 
 
 def test_get_root() -> None:
@@ -10,8 +10,8 @@ def test_get_root() -> None:
 
 def test_setup_and_teardown() -> None:
     with TestClient(app):
-        assert manager.delivery_task is not None
-        assert not manager.delivery_task.done()
+        assert context.delivery_task is not None
+        assert not context.delivery_task.done()
 
-    assert manager.delivery_task.done()
-    assert manager.delivery_task.cancelled()
+    assert context.delivery_task.done()
+    assert context.delivery_task.cancelled()

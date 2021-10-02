@@ -16,7 +16,7 @@ from server.request import Request
 from server.request_handler import RequestHandler
 
 
-class Manager:
+class AppContext:
     def __init__(self) -> None:
         self.client_manager = ClientManager()
         self.request_handler = RequestHandler(self.client_manager)
@@ -24,19 +24,19 @@ class Manager:
         self.delivery_task: Optional[Task[None]] = None
 
 
-manager = Manager()
+context = AppContext()
 app = FastAPI()
 
 
 @app.on_event("startup")
 async def on_startup() -> None:
-    manager.delivery_task = asyncio.create_task(manager.delivery_manager.deliver_messages())
+    context.delivery_task = asyncio.create_task(context.delivery_manager.deliver_messages())
 
 
 @app.on_event("shutdown")
 async def on_shutdown() -> None:
-    if manager.delivery_task:
-        manager.delivery_task.cancel()
+    if context.delivery_task:
+        context.delivery_task.cancel()
 
 
 @app.websocket("/")
@@ -49,12 +49,12 @@ async def websocket_endpoint(ws: WebSocket) -> None:
     try:
         while True:
             request = await ws.receive_json()
-            manager.request_handler.handle(client, Request.from_json(request))
+            context.request_handler.handle(client, Request.from_json(request))
     except WebSocketDisconnect:
         logger.info(f"Client '{client.id}' disconnected.")
 
-        if manager.client_manager.contains(client.id):
-            manager.client_manager.remove(client.id)
+        if context.client_manager.contains(client.id):
+            context.client_manager.remove(client.id)
 
 
 @app.get("/")

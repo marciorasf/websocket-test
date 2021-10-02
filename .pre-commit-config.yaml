@@ -19,7 +19,7 @@ repos:
 
       - id: mypy
         name: Check types with mypy
-        entry: mypy server
+        entry: mypy
         language: system
         pass_filenames: true
         files: server|tests|client

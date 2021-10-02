@@ -18,7 +18,7 @@ async def test_client_send_message(ws: Mock) -> None:
     ws.send_text.assert_called()
 
 
-def test_add() -> None:
+def test_add(ws: WebSocket) -> None:
     manager = ClientManager()
 
     manager.add(Client(id="1", ws=ws))
@@ -27,7 +27,7 @@ def test_add() -> None:
     assert len(manager) == 2
 
 
-def test_get() -> None:
+def test_get(ws: WebSocket) -> None:
     manager = ClientManager()
     client = Client(id="1", ws=ws)
     manager.add(client)
@@ -45,7 +45,7 @@ def test_get_nonexistent_client() -> None:
     assert client is None
 
 
-def test_contains() -> None:
+def test_contains(ws: WebSocket) -> None:
     manager = ClientManager()
     client = Client(id="1", ws=ws)
     manager.add(client)
@@ -70,7 +70,7 @@ def test_remove_nonexistent_doesnt_raise_exception() -> None:
     manager.remove("1")
 
 
-def test_clients(ws: Mock) -> None:
+def test_clients(ws: WebSocket) -> None:
     manager = ClientManager()
     c1 = Client(id="1", ws=ws)
     manager.add(c1)

@@ -9,7 +9,7 @@ from client.client import simulate_client
 from server.main import app
 
 
-class Server:
+class TestServer:
     async def run(self) -> None:
         self.proc = Process(
             target=uvicorn.run,
@@ -30,7 +30,7 @@ class Server:
 @pytest.mark.asyncio
 @pytest.mark.freeze_time("2021-02-10 10:00:00", tick=True)
 async def test_main() -> None:
-    server = Server()
+    server = TestServer()
     await server.run()
 
     responses = await simulate_client("ws://localhost:5000", 2)
