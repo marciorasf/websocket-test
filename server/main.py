@@ -1,5 +1,4 @@
 import asyncio
-import json
 from asyncio.tasks import Task
 from typing import Optional
 
@@ -50,7 +49,7 @@ async def websocket_endpoint(ws: WebSocket) -> None:
     try:
         while True:
             request = await ws.receive_json()
-            manager.request_handler.handle(client, Request.from_json(json.loads(request)))
+            manager.request_handler.handle(client, Request.from_json(request))
     except WebSocketDisconnect:
         logger.info(f"Client '{client.id}' disconnected.")
 
