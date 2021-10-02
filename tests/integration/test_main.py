@@ -15,7 +15,7 @@ class TestServer:
             target=uvicorn.run,
             args=(app,),
             kwargs={"host": "127.0.0.1", "port": 5000, "log_level": "info"},
-            daemon=True,
+            daemon=False,
         )
 
         self.proc.start()
