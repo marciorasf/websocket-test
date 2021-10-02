@@ -44,8 +44,7 @@ async def on_shutdown() -> None:
 async def websocket_endpoint(ws: WebSocket) -> None:
     await ws.accept()
 
-    client_name = utils.client_name(ws)
-    client = Client(id=client_name, ws=ws)
+    client = Client(id=utils.client_name(ws), ws=ws)
     logger.info(f"Client '{client.id}' connected.")
 
     try:
@@ -55,7 +54,7 @@ async def websocket_endpoint(ws: WebSocket) -> None:
 
             manager.request_handler.handle(client.ws, Request.from_json(json.loads(request)))
     except WebSocketDisconnect:
-        logger.info(f"Client '{client_name}' disconnected.")
+        logger.info(f"Client '{client.id}' disconnected.")
 
         if manager.client_manager.contains(client.id):
             manager.client_manager.remove(client.id)
