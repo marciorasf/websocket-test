@@ -1,24 +1,22 @@
 import json
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Any, Dict, Literal, Optional, Type, TypeVar, Union
-
-T = TypeVar("T", bound="Request")
+from typing import Any, Dict, Literal, Union
 
 
 @dataclass
 class Request:
     action: Union[Literal["subscribe"], Literal["unsubscribe"]]
-    payload: Optional[Dict[str, Any]]
+    stream: str
 
     def to_json(self) -> str:
-        return json.dumps({"action": self.action, "payload": self.payload})
+        return json.dumps({"action": self.action, "stream": self.stream})
 
     @classmethod
-    def from_json(cls: Type[T], raw_data: Dict[str, Any]) -> T:
+    def from_json(cls, raw_data: Dict[str, Any]) -> "Request":
         data = defaultdict(lambda: None, raw_data)
 
-        if action := data["action"]:
-            return Request(action=action, payload=data["payload"])  # type: ignore
+        if "action" in data and "stream" in data:
+            return Request(action=data["action"], stream=data["stream"])
         else:
-            raise KeyError("Request must have an action.")
+            raise KeyError("Both action and stream are required fields.")

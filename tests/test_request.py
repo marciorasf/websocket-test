@@ -6,34 +6,24 @@ from server.request import Request
 
 
 def test_to_json() -> None:
-    request = Request("subscribe", {"stream": "all"})
+    request = Request("subscribe", "default")
 
     json_message = request.to_json()
-    assert json_message == '{"action": "subscribe", "payload": {"stream": "all"}}'
+    assert json_message == '{"action": "subscribe", "stream": "default"}'
 
 
 def test_from_json() -> None:
-    data = json.loads('{"action": "subscribe", "payload": {"stream": "all"}}')
+    data = json.loads('{"action": "subscribe", "stream": "default"}')
 
     request = Request.from_json(data)
 
     Test_Assertions().assertIsInstance(request, Request)
     assert request.action == "subscribe"
-    assert request.payload == {"stream": "all"}
+    assert request.stream == "default"
 
 
-def test_from_json_without_payload() -> None:
-    data = json.loads('{"action": "subscribe"}')
-
-    request = Request.from_json(data)
-
-    Test_Assertions().assertIsInstance(request, Request)
-    assert request.action == "subscribe"
-    assert request.payload is None
-
-
-def test_from_json_without_action_raises_exception() -> None:
-    data = json.loads('{"payload": ""}')
+def test_from_json_without_field_raises_exception() -> None:
+    data = json.loads("{}")
 
     with pytest.raises(KeyError):
         Request.from_json(data)

@@ -21,7 +21,7 @@ def client() -> Client:
 
 def test_handle_subscribe(client: Client, client_manager: Mock) -> None:
     handler = RequestHandler(client_manager)
-    request = Request(action="subscribe", payload=dict())
+    request = Request(action="subscribe", stream="default")
 
     handler.handle(client, request)
 
@@ -30,7 +30,7 @@ def test_handle_subscribe(client: Client, client_manager: Mock) -> None:
 
 def test_handle_unsubscribe(client: Client, client_manager: Mock) -> None:
     handler = RequestHandler(client_manager)
-    request = Request(action="unsubscribe", payload=dict())
+    request = Request(action="unsubscribe", stream="default")
 
     handler.handle(client, request)
 
@@ -39,7 +39,7 @@ def test_handle_unsubscribe(client: Client, client_manager: Mock) -> None:
 
 def test_handle_unknown_action(client: Client, client_manager: Mock) -> None:
     handler = RequestHandler(client_manager)
-    request = Request(action="other", payload=dict())  # type: ignore
+    request = Request(action="other", stream="default")  # type: ignore
 
     with pytest.raises(ValueError):
         handler.handle(client, request)
