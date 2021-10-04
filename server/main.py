@@ -19,9 +19,11 @@ class AppContext:
         self.client_manager = ClientManager()
         self.request_handler = RequestHandler(self.client_manager)
         self.delivery_manager = DeliveryManager(
-            generators=[
-                NumberGenerator(interval_in_seconds=self.settings.generator_interval_in_seconds),
-            ],
+            generators={
+                "default": NumberGenerator(
+                    interval_in_seconds=self.settings.generator_interval_in_seconds
+                ),
+            },
             client_manager=self.client_manager,
         )
 
