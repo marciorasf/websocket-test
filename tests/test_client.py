@@ -10,9 +10,40 @@ def ws() -> WebSocket:
     return Mock(spec=WebSocket)
 
 
+@pytest.fixture
+def client(ws: Mock) -> Client:
+    return Client("1", ws)
+
+
 @pytest.mark.asyncio
-async def test_send_message(ws: Mock) -> None:
-    client = Client("1", ws)
+async def test_send_message(ws: Mock, client: Client) -> None:
     await client.send_message("ola")
 
     ws.send_text.assert_called()
+
+
+def test_subscribe(client: Client) -> None:
+    client.subscribe("default")
+
+    assert client.is_subscribed("default")
+    assert not client.is_subscribed("other")
+
+
+def test_subscribe_same_stream_twice(client: Client) -> None:
+    client.subscribe("default")
+
+    # Should not raise an exception.
+    client.subscribe("default")
+
+
+def test_unsubscribe(client: Client) -> None:
+    client.subscribe("default")
+
+    client.unsubscribe("default")
+
+    assert not client.is_subscribed("default")
+
+
+def test_unsubscribe_nonexistent_stream(client: Client) -> None:
+    # Should not raise exception.
+    client.unsubscribe("default")
