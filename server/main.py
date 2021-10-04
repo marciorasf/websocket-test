@@ -7,7 +7,11 @@ from server.client import Client
 from server.client_manager import ClientManager
 from server.delivery_manager import DeliveryManager
 from server.logger import logger
-from server.number_generator import NumberGenerator
+from server.number_generator import (
+    create_default_generator,
+    create_even_generator,
+    create_odd_generator,
+)
 from server.request import Request
 from server.request_handler import RequestHandler
 from server.settings import Settings
@@ -20,9 +24,9 @@ class AppContext:
         self.request_handler = RequestHandler(self.client_manager)
         self.delivery_manager = DeliveryManager(
             generators={
-                "default": NumberGenerator(
-                    interval_in_seconds=self.settings.generator_interval_in_seconds
-                ),
+                "default": create_default_generator(self.settings.generator_interval_in_seconds),
+                "even": create_even_generator(self.settings.generator_interval_in_seconds),
+                "odd": create_odd_generator(self.settings.generator_interval_in_seconds),
             },
             client_manager=self.client_manager,
         )
