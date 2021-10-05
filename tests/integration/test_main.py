@@ -33,12 +33,24 @@ async def test_main() -> None:
     server = TestServer()
     await server.run()
 
-    responses = await simulate_client("ws://localhost:5000", 2)
+    odd_responses, even_responses = await simulate_client("ws://localhost:5000", 2)
 
-    for response in responses:
+    assert len(odd_responses) > 0
+    for response in odd_responses:
         parsed = json.loads(response)
 
         assert parsed["stream"] == "odd"
+        assert isinstance(parsed["content"], int)
+        assert isinstance(parsed["timestamp"], str)
+
+        # Test if can be converted to datetime.
+        datetime.fromisoformat(parsed["timestamp"])
+
+    assert len(even_responses) > 0
+    for response in even_responses:
+        parsed = json.loads(response)
+
+        assert parsed["stream"] == "even"
         assert isinstance(parsed["content"], int)
         assert isinstance(parsed["timestamp"], str)
 
