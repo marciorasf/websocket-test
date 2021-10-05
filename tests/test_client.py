@@ -47,3 +47,17 @@ def test_unsubscribe(client: Client) -> None:
 def test_unsubscribe_nonexistent_stream(client: Client) -> None:
     # Should not raise exception.
     client.unsubscribe("default")
+
+
+def test_is_subscribed(client: Client) -> None:
+    client.subscribe("default")
+
+    assert client.is_subscribed("default")
+    assert not client.is_subscribed("other")
+
+
+def test_has_subscription(client: Client) -> None:
+    assert not client.has_subscription()
+
+    client.subscribe("default")
+    assert client.has_subscription()

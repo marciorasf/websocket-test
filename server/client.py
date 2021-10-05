@@ -24,3 +24,6 @@ class Client:
 
     def is_subscribed(self, stream: str) -> bool:
         return stream in self._subscribed_streams
+
+    def has_subscription(self) -> bool:
+        return len(self._subscribed_streams) > 0
