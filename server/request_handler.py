@@ -25,4 +25,6 @@ class RequestHandler:
         logger.debug(f"Unsubscribing client '{client.id}'.")
 
         client.unsubscribe(stream)
-        self._client_manager.remove(client.id)
+
+        if not client.has_subscription():
+            self._client_manager.remove(client.id)
