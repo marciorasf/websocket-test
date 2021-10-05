@@ -38,6 +38,7 @@ async def test_main() -> None:
     for response in responses:
         parsed = json.loads(response)
 
+        assert parsed["stream"] == "odd"
         assert isinstance(parsed["content"], int)
         assert isinstance(parsed["timestamp"], str)
 

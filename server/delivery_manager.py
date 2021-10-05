@@ -1,4 +1,5 @@
 import asyncio
+import json
 from asyncio import Queue
 from asyncio.tasks import Task
 from datetime import datetime
@@ -44,7 +45,11 @@ class DeliveryManager:
         while True:
             if not self._message_queue.empty():
                 message = await self._message_queue.get()
-                tasks = [client.send_message(message) for client in self._client_manager.clients()]
+                stream = json.loads(message)["stream"]
+                tasks = [
+                    client.send_message(message)
+                    for client in self._client_manager.stream_clients(stream)
+                ]
                 await asyncio.gather(*tasks)
             else:
                 await asyncio.sleep(0.01)

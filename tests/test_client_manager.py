@@ -73,3 +73,17 @@ def test_clients(ws: WebSocket) -> None:
 
     assert next(clients) is c1
     assert next(clients) is c2
+
+
+def test_stream_clients(ws: WebSocket) -> None:
+    manager = ClientManager()
+    c1 = Client(id="1", ws=ws)
+    c1.subscribe("default")
+    manager.add(c1)
+
+    clients = manager.stream_clients("default")
+    assert next(clients) is c1
+
+    clients = manager.stream_clients("other")
+    with pytest.raises(StopIteration):
+        next(clients)

@@ -28,6 +28,9 @@ class MockClient(Client):
             )
         )
 
+    def is_subscribed(self, stream: str) -> bool:
+        return True
+
 
 @pytest.fixture
 def ws() -> WebSocket:

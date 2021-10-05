@@ -26,5 +26,8 @@ class ClientManager:
     def clients(self) -> Generator[Client, None, None]:
         return (client for client in self._clients.values())
 
+    def stream_clients(self, stream: str) -> Generator[Client, None, None]:
+        return (client for client in self._clients.values() if client.is_subscribed(stream))
+
     def __len__(self) -> int:
         return len(self._clients)
