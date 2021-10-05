@@ -16,7 +16,6 @@ class Client:
         await self.ws.send_text(message)
 
     def subscribe(self, stream: str) -> None:
-        print(stream)
         self._subscribed_streams.add(stream)
 
     def unsubscribe(self, stream: str) -> None:
