@@ -2,7 +2,7 @@ import asyncio
 from asyncio import Queue
 from asyncio.tasks import Task
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from server.client_manager import ClientManager
 from server.number_generator import NumberGenerator
@@ -24,16 +24,20 @@ class DeliveryManager:
         self._tasks.extend(tasks)
 
     async def _agreggate_messages(self) -> None:
+        def _create_task_for_generator(item: Tuple[str, NumberGenerator]) -> Task[None]:
+            stream, generator = item
+            return asyncio.create_task(self._enqueue_generator_messages(stream, generator))
+
         tasks = map(
-            lambda generator: asyncio.create_task(self._enqueue_generator_messages(generator)),
-            self._generators.values(),
+            lambda entry: _create_task_for_generator(entry),
+            self._generators.items(),
         )
         self._tasks.extend(tasks)
 
-    async def _enqueue_generator_messages(self, generator: NumberGenerator) -> None:
+    async def _enqueue_generator_messages(self, stream: str, generator: NumberGenerator) -> None:
         async for number in generator.numbers():
             await self._message_queue.put(
-                Response(content=number, timestamp=datetime.now()).to_json()
+                Response(stream=stream, content=number, timestamp=datetime.now()).to_json()
             )
 
     async def _send_messages(self) -> None:

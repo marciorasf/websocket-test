@@ -22,6 +22,7 @@ class MockClient(Client):
         parsed_message = json.loads(message)
         self.messages.append(
             Response(
+                stream="default",
                 content=parsed_message["content"],
                 timestamp=datetime.fromisoformat(parsed_message["timestamp"]),
             )

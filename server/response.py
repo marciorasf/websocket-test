@@ -6,8 +6,15 @@ from typing import Union
 
 @dataclass
 class Response:
+    stream: str
     content: Union[int, str]
     timestamp: datetime
 
     def to_json(self) -> str:
-        return json.dumps(dict(content=self.content, timestamp=datetime.isoformat(self.timestamp)))
+        return json.dumps(
+            dict(
+                stream=self.stream,
+                content=self.content,
+                timestamp=datetime.isoformat(self.timestamp),
+            )
+        )
