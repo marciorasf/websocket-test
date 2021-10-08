@@ -1,12 +1,35 @@
-import http from 'k6/http'
-import { sleep } from 'k6'
+import ws from 'k6/ws'
 
 export let options = {
-  vus: 10,
+  vus: 1,
   duration: '30s',
 }
 
 export default function () {
-  http.get('http://test.k6.io')
-  sleep(1);
+  const url = "ws://server"
+
+  ws.connect(url, function (socket) {
+    socket.on("open", () => {
+      socket.send(JSON.stringify({
+        action: "subscribe",
+        stream: "default"
+      }))
+
+      socket.send(JSON.stringify({
+        action: "subscribe",
+        stream: "even"
+      }))
+
+      socket.send(JSON.stringify({
+        action: "subscribe",
+        stream: "odd"
+      }))
+    })
+
+    socket.on("message", (data) => {
+    })
+
+    socket.on("close", () => {
+    })
+  })
 }
