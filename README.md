@@ -12,8 +12,8 @@ Some other stuff that I learned a bit on this project:
 
 ## Requirements
 
-- Python 3.9 (maybe it works with Python 3.7 and 3.8 but I won't test it) 
-- Docker and Docker-Compose
+- Python 3.9 (maybe it works with Python 3.7 and 3.8 but I won't test it)
+- Docker and DockerCompose
 - Node 14 (again, maybe it works with other versions)
 - Yarn
 
@@ -26,7 +26,7 @@ Some other stuff that I learned a bit on this project:
         poetry install
 
 2. Install pre-commit hooks
-    
+
         pre-commit install
         pre-commit install -t pre-push
 
@@ -37,7 +37,7 @@ Run `run.sh`
 ## Use
 
 1. Connect via WebSocket
- 
+
 2. Send a message subscribing to a stream. Available streams: `default`, `even`, `odd`
     ```json
     {
