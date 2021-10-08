@@ -9,7 +9,7 @@
       "esnext.asynciterable"
     ],
     "skipLibCheck": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "./build",
     "moduleResolution": "node",
     "removeComments": true,
