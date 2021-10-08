@@ -1,14 +1,17 @@
 import ws from 'k6/ws'
 
-export let options = {
+export const options = {
   vus: 1,
   duration: '30s',
 }
 
-export default function () {
-  const url = "ws://server"
+const settings = {
+  url: "ws://server",
+  close_socket_after_n_milliseconds: 5 * 1000,
+}
 
-  ws.connect(url, function (socket) {
+export default function () {
+  ws.connect(settings.url, function (socket) {
     socket.on("open", () => {
       socket.send(JSON.stringify({
         action: "subscribe",
@@ -26,10 +29,14 @@ export default function () {
       }))
     })
 
-    socket.on("message", (data) => {
+    socket.on("message", () => {
     })
 
     socket.on("close", () => {
     })
+
+    socket.setTimeout(() => {
+      socket.close()
+    }, settings.close_socket_after_n_milliseconds)
   })
 }
