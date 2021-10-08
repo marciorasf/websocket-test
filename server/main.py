@@ -29,6 +29,7 @@ class AppContext:
                 "odd": create_odd_generator(self.settings.generator_interval_in_seconds),
             },
             client_manager=self.client_manager,
+            random_delay=self.settings.random_delay,
         )
 
 

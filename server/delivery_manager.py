@@ -1,5 +1,6 @@
 import asyncio
 import json
+import random
 from asyncio import Queue
 from asyncio.tasks import Task
 from datetime import datetime
@@ -11,11 +12,17 @@ from server.response import Response
 
 
 class DeliveryManager:
-    def __init__(self, generators: Dict[str, NumberGenerator], client_manager: ClientManager):
+    def __init__(
+        self,
+        generators: Dict[str, NumberGenerator],
+        client_manager: ClientManager,
+        random_delay: bool = False,
+    ):
         self._generators = generators
         self._client_manager = client_manager
         self._message_queue: Queue[str] = Queue()
         self._tasks: List[Task[None]] = []
+        self._random_delay: bool = random_delay
 
     def deliver_messages(self) -> None:
         tasks = [
@@ -23,6 +30,14 @@ class DeliveryManager:
             asyncio.create_task(self._send_messages()),
         ]
         self._tasks.extend(tasks)
+
+    def stop(self) -> None:
+        while len(self._tasks) > 0:
+            task = self._tasks.pop()
+            task.cancel()
+
+    def running(self) -> bool:
+        return len(self._tasks) > 0
 
     async def _agreggate_messages(self) -> None:
         def _create_task_for_generator(item: Tuple[str, NumberGenerator]) -> Task[None]:
@@ -37,6 +52,9 @@ class DeliveryManager:
 
     async def _enqueue_generator_messages(self, stream: str, generator: NumberGenerator) -> None:
         async for number in generator.numbers():
+            if self._random_delay:
+                await asyncio.sleep(random.random())
+
             await self._message_queue.put(
                 Response(stream=stream, content=number, timestamp=datetime.now()).to_json()
             )
@@ -53,11 +71,3 @@ class DeliveryManager:
                 await asyncio.gather(*tasks)
             else:
                 await asyncio.sleep(0.01)
-
-    def stop(self) -> None:
-        while len(self._tasks) > 0:
-            task = self._tasks.pop()
-            task.cancel()
-
-    def running(self) -> bool:
-        return len(self._tasks) > 0
