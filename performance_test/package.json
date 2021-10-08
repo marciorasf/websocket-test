@@ -1,0 +1,13 @@
+{
+  "name": "performance_test",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/k6": "^0.34.1",
+    "tsc": "^2.0.3"
+  }
+}
