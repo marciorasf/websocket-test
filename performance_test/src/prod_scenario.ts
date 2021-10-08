@@ -1,3 +1,4 @@
+import { Trend } from 'k6/metrics'
 import ws from 'k6/ws'
 
 export const options = {
@@ -7,8 +8,10 @@ export const options = {
 
 const settings = {
   url: "ws://server",
-  close_socket_after_n_milliseconds: 5 * 1000,
+  closeSocketAfterNMilliseconds: 5 * 1000,
 }
+
+const messageDelay = new Trend("message_delay", true)
 
 export default function () {
   ws.connect(settings.url, function (socket) {
@@ -29,7 +32,10 @@ export default function () {
       }))
     })
 
-    socket.on("message", () => {
+    socket.on("message", (rawData) => {
+      const data = parseMessage(rawData)
+      const delay = Date.now() - (new Date(data.timestamp)).getTime()
+      messageDelay.add(delay / 1000)
     })
 
     socket.on("close", () => {
@@ -37,6 +43,16 @@ export default function () {
 
     socket.setTimeout(() => {
       socket.close()
-    }, settings.close_socket_after_n_milliseconds)
+    }, settings.closeSocketAfterNMilliseconds)
   })
+}
+
+type Message = {
+  stream: string
+  content: number
+  timestamp: Date
+}
+
+function parseMessage(rawMessage: string): Message {
+  return JSON.parse(rawMessage)
 }
