@@ -97,9 +97,29 @@ jobs:
           cd performance_tests
           yarn
           yarn build
-          ls
-          ls build
-        
+      
+      - name: Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: performance_tests/build
+          key: ${{ github.run_id }}
+          
+  test-cache:
+    needs: [setup-performance-test]
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: performance_tests/build
+          key: ${{ github.run_id }}
+          
+      - name: see files
+        run: ls performance_tests/build
+              
+
 
 #   performance-test:
 #     needs: [build]
