@@ -126,9 +126,11 @@ jobs:
     
     runs-on: ubuntu-latest
     
+    container: node:10.18-jessie
+
     services:
       server:
-        image: "${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}"
+        image: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
     
     steps:
       - name: Cache test files
