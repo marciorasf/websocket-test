@@ -94,6 +94,7 @@ jobs:
       
       - name: Install dependencies
         run: cd performance_tests
+      - run: ls
       - run: yarn
       - run: yarn build
         
