@@ -10,95 +10,133 @@ env:
   IMAGE_NAME: websocket-test
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+#   test:
+#     runs-on: ubuntu-latest
 
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: Set up Python 3.9
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: 3.9
+
+#       - name: Upgrade pip
+#         run: python -m pip install --upgrade pip
+
+#       - name: Install poetry
+#         uses: snok/install-poetry@v1.2.0
+#         with:
+#           virtualenvs-create: true
+#           virtualenvs-in-project: true
+
+#       - name: Load cached venv
+#         id: cached-poetry-dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: .venv
+#           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+#       - name: Install dependencies
+#         run: poetry install
+#         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
+#       - name: Run unit tests
+#         run: poetry run pytest
+
+#       - name: Format code with black
+#         run: poetry run black server
+
+#       - name: Analyse code with flake8
+#         run: poetry run flake8 server
+
+#       - name: Analyse code with mypy
+#         run: poetry run mypy server
+
+#   build:
+#     needs: [test]
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: Login on DockerHub
+#         uses: docker/login-action@v1.10.0
+#         with:
+#           username: ${{secrets.DOCKERHUB_USERNAME}}
+#           password: ${{secrets.DOCKERHUB_PASSWORD}}
+#           logout: true
+
+#       - name: Build and push Docker image
+#         uses: docker/build-push-action@v2.7.0
+#         with:
+#           context: .
+#           file: ./Dockerfile
+#           push: true
+#           tags: |
+#             ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
+#             ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
+#           github-token: ${{ github.token }}
+          
+  setup-performance-test:
+#     needs: [test]
+    
+    runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
+      
+      - name: Use Node.js
+        uses: actions/setup-node@v2
         with:
-          python-version: 3.9
-
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
-
-      - name: Install poetry
-        uses: snok/install-poetry@v1.2.0
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-
+          node-version: 14.17.6
+      
       - name: Install dependencies
-        run: poetry install
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: cd performance_tests
+      - run: yarn
+      - run: yarn build
+        
 
-      - name: Run unit tests
-        run: poetry run pytest
+#   performance-test:
+#     needs: [build]
+    
+#     runs-on: ubuntu-latest
+    
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v1
 
-      - name: Format code with black
-        run: poetry run black server
+#     - name: Run k6 test
+#       uses: k6io/action@v0.1
+#       with:
+#         filename: test.js
+    
+#     services:
+#       server:
+#         image: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
 
-      - name: Analyse code with flake8
-        run: poetry run flake8 server
+  
+#   deploy:
+#     needs: [performance-test]
 
-      - name: Analyse code with mypy
-        run: poetry run mypy server
+#     runs-on: ubuntu-latest
 
-  build:
-    needs: [test]
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           ref: caprover-releases
 
-    runs-on: ubuntu-latest
+#       - name: Set captain-definition new image
+#         uses: jossef/action-set-json-field@v1
+#         with:
+#           file: captain-definition
+#           field: imageName
+#           value: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
 
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Login on DockerHub
-        uses: docker/login-action@v1.10.0
-        with:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_PASSWORD}}
-          logout: true
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2.7.0
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
-            ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
-          github-token: ${{ github.token }}
-
-  deploy:
-    needs: [build]
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: caprover-releases
-
-      - name: Set captain-definition new image
-        uses: jossef/action-set-json-field@v1
-        with:
-          file: captain-definition
-          field: imageName
-          value: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
-
-      - name: Commit new captain-definition
-        uses: stefanzweifel/git-auto-commit-action@v4.12.0
-        with:
-          commit_message: update image tag to ${{ github.run_id }}
-          branch: caprover-releases
-          push_options: --force
+#       - name: Commit new captain-definition
+#         uses: stefanzweifel/git-auto-commit-action@v4.12.0
+#         with:
+#           commit_message: update image tag to ${{ github.run_id }}
+#           branch: caprover-releases
+#           push_options: --force
