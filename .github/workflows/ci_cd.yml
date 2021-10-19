@@ -95,9 +95,10 @@ jobs:
       - name: Build js files
         run: |
           cd performance_tests
-          ls
           yarn
           yarn build
+          ls
+          ls build
         
 
 #   performance-test:
