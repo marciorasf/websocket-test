@@ -93,7 +93,7 @@ jobs:
           node-version: 14.17.6
       
       - name: Install dependencies
-        run: cd performance_tests
+      - run: cd performance_tests
       - run: ls
       - run: yarn
       - run: yarn build
