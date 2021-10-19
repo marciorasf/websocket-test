@@ -126,6 +126,10 @@ jobs:
     
     runs-on: ubuntu-latest
     
+    services:
+      server:
+        image: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
+    
     steps:
       - name: Cache test files
         uses: actions/cache@v2.1.6
@@ -138,10 +142,6 @@ jobs:
         with:
           filename: performance_tests/build/default_load.js
     
-#     services:
-#       server:
-#         image: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
-
   
 #   deploy:
 #     needs: [performance-test]
