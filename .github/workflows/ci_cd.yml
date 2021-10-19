@@ -138,9 +138,9 @@ jobs:
         with:
           filename: performance_tests/build/default_load.js
     
-    services:
-      server:
-        image: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
+#     services:
+#       server:
+#         image: ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
 
   
 #   deploy:
