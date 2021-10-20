@@ -121,7 +121,8 @@ jobs:
         run: |
           docker network create performance-test
           docker run --network performance-test --name server -d ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
-          docker run --network performance-test --name k6 --volume $PWD/performance_tests/build:/tests --volume $PWD/output:/output -i loadimpact/k6 run  /tests/default_load.js
+          docker run --network performance-test --name k6 --volume $PWD/performance_tests/build:/tests --volume $PWD/output:/output \
+            -i loadimpact/k6 run --summary-export=/output/result.json /tests/default_load.js
           docker container rm -f server
           docker container rm -f k6
           
