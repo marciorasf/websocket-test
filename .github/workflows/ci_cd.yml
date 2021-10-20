@@ -85,52 +85,49 @@ jobs:
 #             ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
 #           github-token: ${{ github.token }}
           
-#   setup-performance-test:
+  setup-performance-test:
 #     needs: [test]
     
-#     runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     
-#     steps:
-#       - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
       
-#       - name: Use Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: 14.17.6
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.17.6
       
-#       - name: Build test files
-#         run: |
-#           cd performance_tests
-#           yarn
-#           yarn build
+      - name: Build test files
+        run: |
+          cd performance_tests
+          yarn
+          yarn build
       
-#       - name: Cache test files
-#         uses: actions/cache@v2.1.6
-#         with:
-#           path: performance_tests/build
-#           key: ${{ github.run_id }}
+      - name: Cache test files
+        uses: actions/cache@v2.1.6
+        with:
+          path: performance_tests/build
+          key: ${{ github.run_id }}
           
 
-#   performance-test:
-#     needs: [build, setup-performance-test]
+  performance-test:
+    needs: [setup-performance-test]
     
-#     runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     
-#     services:
-#       server:
-#         image: marciorasf/b3-ranking:latest
-    
-#     steps:
-#       - name: Cache test files
-#         uses: actions/cache@v2.1.6
-#         with:
-#           path: performance_tests/build
-#           key: ${{ github.run_id }}
+    steps:
+      - name: Cache test files
+        uses: actions/cache@v2.1.6
+        with:
+          path: performance_tests/build
+          key: ${{ github.run_id }}
 
-#       - name: Run k6 test
-#         uses: k6io/action@v0.1
-#         with:
-#           filename: performance_tests/build/default_load.js
+      - name: Run k6 test
+        run: |
+          docker network create performance-test
+          docker run --network performance-test ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
+          docker run --network performance-test --volume performance_tests/build:/tests -i loadimpact/k6 run /tests/default_load.js
     
   
 #   deploy:
