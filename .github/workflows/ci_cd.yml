@@ -10,12 +10,6 @@ env:
   IMAGE_NAME: websocket-test
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: check docker
-        run: docker --version
 #   test:
 #     runs-on: ubuntu-latest
 
@@ -126,8 +120,10 @@ jobs:
       - name: Run k6 test
         run: |
           docker network create performance-test
-          docker run --network performance-test ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
-          docker run --network performance-test --volume performance_tests/build:/tests -i loadimpact/k6 run /tests/default_load.js
+          docker run --network performance-test --name server -d ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
+          docker run --network performance-test --name k6 --volume performance_tests/build:/tests -i loadimpact/k6 run /tests/default_load.js
+          docker container rm -f server
+          docker container rm -f k6
     
   
 #   deploy:
