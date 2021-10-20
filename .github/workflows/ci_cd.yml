@@ -120,10 +120,16 @@ jobs:
       - name: Run k6 test
         run: |
           docker network create performance-test
-          docker run --network performance-test --name server -d ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:latest
-          docker run --network performance-test --name k6 --volume $PWD/performance_tests/build:/tests -i loadimpact/k6 run /tests/default_load.js
+          docker run --network performance-test --name server -d ${{secrets.DOCKERHUB_USERNAME}}/${{env.IMAGE_NAME}}:${{ github.run_id }}
+          docker run --network performance-test --name k6 --volume $PWD/performance_tests/build:/tests --volume $PWD/output:/output -i loadimpact/k6 run  /tests/default_load.js
           docker container rm -f server
           docker container rm -f k6
+          
+      - name: Archive performance test result
+        uses: actions/upload-artifact@v2
+        with:
+          name: performance-test-result
+          path: performance_tests/output/result.json
     
   
   deploy:
