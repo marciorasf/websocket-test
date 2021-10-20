@@ -130,7 +130,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: performance-test-result
-          path: performance_tests/output/result.json
+          path: output/result.json
     
   
   deploy:
