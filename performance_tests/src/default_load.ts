@@ -1,16 +1,20 @@
 import ws from 'k6/ws'
 import { Counter, Trend } from 'k6/metrics'
 import { parseMessage } from "./utils.js"
+import { Options } from 'k6/options'
 
 const settings = {
   url: "ws://server",
 }
 
-export const options = {
-  vus: 100,
-  duration: '30s',
+export const options: Options = {
+  stages: [
+    { duration: "30s", target: 100 },
+    { duration: "1m", target: 100 },
+    { duration: "10s", target: 0 },
+  ],
   thresholds: {
-    message_delay: ["p(99.99) < 50", "max < 200"]
+    message_delay: ["p(99.99) < 1", "max < 10"]
   },
   tags: {
     name: "stream"
