@@ -22,7 +22,7 @@ repos:
         entry: mypy
         language: system
         pass_filenames: true
-        files: .py
+        types: [python]
         stages: [commit, push]
 
       - id: black
@@ -30,7 +30,7 @@ repos:
         entry: black
         language: system
         pass_filenames: true
-        files: .py
+        types: [python]
         stages: [commit, push]
 
       - id: flake8
@@ -38,5 +38,5 @@ repos:
         entry: flake8
         language: system
         pass_filenames: true
-        files: .py
+        types: [python]
         stages: [commit, push]
