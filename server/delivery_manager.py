@@ -61,13 +61,10 @@ class DeliveryManager:
 
     async def _send_messages(self) -> None:
         while True:
-            if not self._message_queue.empty():
-                message = await self._message_queue.get()
-                stream = json.loads(message)["stream"]
-                tasks = [
-                    client.send_message(message)
-                    for client in self._client_manager.stream_clients(stream)
-                ]
-                await asyncio.gather(*tasks)
-            else:
-                await asyncio.sleep(0.01)
+            message = await self._message_queue.get()
+            stream = json.loads(message)["stream"]
+            tasks = [
+                client.send_message(message)
+                for client in self._client_manager.stream_clients(stream)
+            ]
+            await asyncio.gather(*tasks)

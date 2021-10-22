@@ -26,6 +26,7 @@ class TestServer:
         self.proc.terminate()
 
 
+@pytest.mark.skip
 @pytest.mark.integration
 @pytest.mark.asyncio
 @pytest.mark.freeze_time("2021-02-10 10:00:00", tick=True)
