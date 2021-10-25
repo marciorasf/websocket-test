@@ -16,10 +16,10 @@ def client(ws: Mock) -> Client:
 
 
 @pytest.mark.asyncio
-async def test_send_message(ws: Mock, client: Client) -> None:
+async def test_send_message(client: Client) -> None:
     await client.send_message("ola")
 
-    ws.send_text.assert_called()
+    assert client.pending_messages() == 1
 
 
 def test_subscribe(client: Client) -> None:

@@ -1,3 +1,4 @@
+from asyncio import Queue
 from dataclasses import dataclass
 from typing import Set
 
@@ -8,12 +9,21 @@ from fastapi import WebSocket
 class Client:
     id: str
     ws: WebSocket
+    _queue: Queue[str] = Queue()
 
     def __post_init__(self) -> None:
         self._subscribed_streams: Set[str] = set()
 
+    async def run(self) -> None:
+        while True:
+            message = await self._queue.get()
+            await self.ws.send_text(message)
+
     async def send_message(self, message: str) -> None:
-        await self.ws.send_text(message)
+        await self._queue.put(message)
+
+    def pending_messages(self) -> int:
+        return self._queue.qsize()
 
     def subscribe(self, stream: str) -> None:
         self._subscribed_streams.add(stream)

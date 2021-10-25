@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import FastAPI, WebSocket
 from starlette.responses import HTMLResponse
 from starlette.websockets import WebSocketDisconnect
@@ -50,17 +52,17 @@ async def on_shutdown() -> None:
 @app.websocket("/")
 async def websocket_endpoint(ws: WebSocket) -> None:
     await ws.accept()
-
     client = Client(id=utils.client_name(ws), ws=ws)
     logger.info(f"Client '{client.id}' connected.")
 
     try:
-        while True:
-            request = await ws.receive_json()
-            context.request_handler.handle(client, Request.from_json(request))
+        await asyncio.gather(_handle_requests(ws, client, context.request_handler), client.run())
     except WebSocketDisconnect:
         logger.info(f"Client '{client.id}' disconnected.")
-
+    except Exception as err:
+        logger.warn(f"Not expected exception while waiting messages: {err}")
+        await ws.close()
+    finally:
         if context.client_manager.contains(client.id):
             context.client_manager.remove(client.id)
 
@@ -74,3 +76,9 @@ async def get_root() -> HTMLResponse:
         <h2>Use ws:// instead of https:// for connecting to the webserver.</h2>
         """
     )
+
+
+async def _handle_requests(ws: WebSocket, client: Client, request_handler: RequestHandler) -> None:
+    while True:
+        request = await ws.receive_json()
+        request_handler.handle(client, Request.from_json(request))
